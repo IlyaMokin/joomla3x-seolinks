@@ -2,7 +2,7 @@
 /**
  * seoLinks
  *
- * @version 1.0.26
+ * @version 1.0.27
  * @package seoLinks
  * @author ZyX (allforjoomla.com)
  * @copyright (C) 2010 by ZyX (http://www.allforjoomla.com)
