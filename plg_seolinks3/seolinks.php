@@ -2,7 +2,7 @@
 /**
  * seoLinks
  *
- * @version 1.0.25
+ * @version 1.0.26
  * @package seoLinks
  * @author ZyX (allforjoomla.com)
  * @copyright (C) 2010 by ZyX (http://www.allforjoomla.com)
@@ -109,13 +109,34 @@ class  plgSystemSeolinks extends JPlugin{
 			$linksOnPage+= substr_count($body,'<a ');
 			if($linksOnPage>=$maxOnPage) return $body;
 		}
-		$body = preg_replace("~(<\!\-\-seoLinks skip\-\->)(.*?)(<\!\-\-\/seoLinks skip\-\->)~sie",'"<:ZyX>".plgSystemSeolinks::maskContent("\\2")."<:ZyX/>"',$body);
-		$body = preg_replace("~(<script)(.*?)(<\/script>)~sie",'"<:ZyX>".plgSystemSeolinks::maskContent("$1$2$3")."<:ZyX/>"',$body);
-		$body = preg_replace("~(<\!\-\-)(.*?)(\-\-\>)~sie",'"<:ZyX>".plgSystemSeolinks::maskContent("$1$2$3")."<:ZyX/>"',$body);
-		$body = preg_replace("~(<style)(.*?)(<\/style>)~sie",'"<:ZyX>".plgSystemSeolinks::maskContent("$1$2$3")."<:ZyX/>"',$body);
-		$body = preg_replace("~(<h[1-6])(.*?)(<\/h[1-6]>)~sie",'"<:ZyX>".plgSystemSeolinks::maskContent("$1$2$3")."<:ZyX/>"',$body);
-		$body = preg_replace("~(<a)(.*?)(<\/a>)~sie",'"<:ZyX>".plgSystemSeolinks::maskContent("$1$2$3")."<:ZyX/>"',$body);
-		$body = preg_replace("~(<[a-z])(.*?)(>)~sie",'"<:ZyX>".plgSystemSeolinks::maskContent("$1$2$3")."<:ZyX/>"',$body);
+		$body = preg_replace_callback("~(<\!\-\-seoLinks skip\-\->)(.*?)(<\!\-\-\/seoLinks skip\-\->)~si",create_function(
+			'$matches',
+			'return "<:ZyX>".plgSystemSeolinks::maskContent($matches[2])."<:ZyX/>";'
+		),$body);
+		$body = preg_replace_callback("~(<script)(.*?)(<\/script>)~si",create_function(
+			'$matches',
+			'return "<:ZyX>".plgSystemSeolinks::maskContent($matches[1].$matches[2].$matches[3])."<:ZyX/>";'
+		),$body);
+		$body = preg_replace_callback("~(<\!\-\-)(.*?)(\-\-\>)~si",create_function(
+			'$matches',
+			'return "<:ZyX>".plgSystemSeolinks::maskContent($matches[1].$matches[2].$matches[3])."<:ZyX/>";'
+		),$body);
+		$body = preg_replace_callback("~(<style)(.*?)(<\/style>)~si",create_function(
+			'$matches',
+			'return "<:ZyX>".plgSystemSeolinks::maskContent($matches[1].$matches[2].$matches[3])."<:ZyX/>";'
+		),$body);
+		$body = preg_replace_callback("~(<h[1-6])(.*?)(<\/h[1-6]>)~si",create_function(
+			'$matches',
+			'return "<:ZyX>".plgSystemSeolinks::maskContent($matches[1].$matches[2].$matches[3])."<:ZyX/>";'
+		),$body);
+		$body = preg_replace_callback("~(<a)(.*?)(<\/a>)~si",create_function(
+			'$matches',
+			'return "<:ZyX>".plgSystemSeolinks::maskContent($matches[1].$matches[2].$matches[3])."<:ZyX/>";'
+		),$body);
+		$body = preg_replace_callback("~(<[a-z])(.*?)(>)~si",create_function(
+			'$matches',
+			'return "<:ZyX>".plgSystemSeolinks::maskContent($matches[1].$matches[2].$matches[3])."<:ZyX/>";'
+		),$body);
 		for($i=0;$i<count($links);$i++){
 			if($maxOnPage>0 && $linksOnPage>=$maxOnPage) break;
 			$link = $links[$i];
@@ -132,8 +153,14 @@ class  plgSystemSeolinks extends JPlugin{
 			$linksOnPage+= $placedLinks;
 			$links[$i] = $link;
 		}
-		$body = preg_replace("~<\:ZyX>(.*?)(?=<\:ZyX\/>)<\:ZyX\/>~sie",'plgSystemSeolinks::unmaskContent("$1")',$body);
-		$body = preg_replace("~<\:ZyX>(.*?)(?=<\:ZyX\/>)<\:ZyX\/>~sie",'plgSystemSeolinks::unmaskContent("$1")',$body);
+		$body = preg_replace_callback("~<\:ZyX>(.*?)(?=<\:ZyX\/>)<\:ZyX\/>~si",create_function(
+			'$matches',
+			'return plgSystemSeolinks::unmaskContent($matches[1]);'
+		),$body);
+		$body = preg_replace_callback("~<\:ZyX>(.*?)(?=<\:ZyX\/>)<\:ZyX\/>~si",create_function(
+			'$matches',
+			'return plgSystemSeolinks::unmaskContent($matches[1]);'
+		),$body);
 		return $body;
 	}
 	
