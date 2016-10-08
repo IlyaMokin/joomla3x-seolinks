@@ -75,7 +75,7 @@ class  plgSystemSeolinks extends JPlugin{
 				'#-#'	=>	'\\.',
 				'#--#'	=>	'\\*'
 			);
-			$uri = &JURI::getInstance();
+			$uri = JURI::getInstance();
 			$host = str_replace('http://www.','http://',$uri->toString(array('scheme', 'user', 'pass', 'host', 'port', 'path', 'query')));
 			$hostW = str_replace('http://','http://www.',$host);
 			$hostX = $uri->toString(array('path','query'));
@@ -145,8 +145,13 @@ class  plgSystemSeolinks extends JPlugin{
 			if($linxCSS!='') $replace = '<span class="'.$linxCSS.'">'.$replace.'</span>';
 			$replace = '$1'.$replace.'$3';
 			$search = "~([\s\.\,\;\!\?\:\>\(\)\'\"\*\/«])(".$link['words'].")([\*\/\'\"\(\)\<\s\.\,\;\!\?\:»])~siu";
-			$body = preg_replace("~(<a)(.*?)(?=<\/a>)(<\/a>)~sie",'"<:ZyX>".plgSystemSeolinks::maskContent("$1$2$3")."<:ZyX/>"',$body);
-			$body = preg_replace($search, $replace, $body,$link['maxNum']);
+
+			$body = preg_replace_callback("~(<a)(.*?)(?=<\/a>)(<\/a>)~si",create_function(
+				'$matches',
+				'return "<:ZyX>".plgSystemSeolinks::maskContent($matches[1].$matches[2].$matches[3])."<:ZyX/>";'
+			),$body);
+			
+			$body = preg_replace($search, $replace, $body, $link['maxNum']);
 			if($body=='') return false;
 			$placedLinks = substr_count($body,'<a ');
 			$link['hasNum']+= $placedLinks;
@@ -165,10 +170,11 @@ class  plgSystemSeolinks extends JPlugin{
 	}
 	
 	function isThisSkipPage(){
+
 		static $result;
 		if(is_bool($result)) return $result;
 		$skipPages = trim($this->params->get('skipPages', ''));
-		$uri = &JURI::getInstance();
+		$uri = JURI::getInstance();
 		$host = str_replace('http://www.','http://',$uri->toString(array('scheme', 'user', 'pass', 'host', 'port', 'path', 'query')));
 		$hostW = str_replace('http://','http://www.',$host);
 		$hostX = $uri->toString(array('path','query'));
@@ -185,13 +191,13 @@ class  plgSystemSeolinks extends JPlugin{
 		return $result;
 	}
 	
-	function maskContent($txt){
+	static function maskContent($txt){
 		$txt = str_replace("\'","'",$txt);
 		$result = base64_encode($txt);
 		return $result;
 	}
 	
-	function unmaskContent($txt){
+	static function unmaskContent($txt){
 		$result = base64_decode($txt);
 		return $result;
 	}
