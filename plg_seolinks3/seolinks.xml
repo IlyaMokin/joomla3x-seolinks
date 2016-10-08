@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="system" method="upgrade">
+	<name>seoLinks</name>
+	<author>ZyX www.allForJoomla.ru</author>
+	<creationDate>Apr 2013</creationDate>
+	<copyright>Copyright 2013 Micriucov Oleg (ZyX) www.allForJoomla.ru. All rights reserved!</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>info@litecms.ru</authorEmail>
+	<authorUrl>http://www.allForJoomla.ru</authorUrl>
+	<version>1.0.25</version>
+	<description><![CDATA[Плагин замены текста на ссылки.]]></description>
+	<files>
+		<filename plugin="seolinks">seolinks.php</filename>
+	</files>
+	<languages folder="languages">
+		<language tag="ru-RU">ru-RU.plg_system_seolinks.ini</language>
+		<language tag="en-GB">en-GB.plg_system_seolinks.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="slType" type="list" label="Process type" description="Process type descr" default="all_html">
+					<option value="com_content">com_content</option>
+					<option value="all_html">All HTML</option>
+				</field>
+				<field name="linx" type="textarea" filter="raw" cols="45" rows="10" label="Links" description="Links descr" />
+				<field name="numRepl" type="text" size="3" default="1" label="Num links on page" description="Num links descr" />
+				<field name="maxOnPage" type="text" size="3" default="100" label="Max links on page" description="Max links descr" />
+				<field name="linx_class" type="text" size="15" default="" label="Links CSS class" description="Links CSS descr" />
+				<field type="spacer" />
+				<field name="skipPages" type="textarea" filter="raw" cols="45" rows="10" label="Skip pages" description="Skip pages descr" />
+			</fieldset>
+		</fields>
+	</config>
+	<updateservers>
+		<server type="extension" priority="1" name="AllForJoomla.ru">http://allforjoomla.ru/updates/plg_seolinks3/</server>
+	</updateservers>
+</extension>
